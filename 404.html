@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Quillfox</title>
+<meta name="robots" content="noindex">
+<style>
+  body { font-family: -apple-system, "Segoe UI", sans-serif; background: #f4f5f7; color: #2f3033;
+         display: grid; place-items: center; min-height: 100vh; margin: 0; text-align: center; padding: 24px; }
+  .hex { width: 84px; height: 92px; margin: 0 auto 26px; background: #e8702a;
+          clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+  h1 { font-size: 1.6rem; margin: 0 0 10px; }
+  p { color: #5c6066; margin: 0 0 22px; }
+  a { display: inline-block; padding: 12px 24px; border-radius: 14px; text-decoration: none;
+       font-weight: 700; color: #2f3033; background: linear-gradient(135deg, #e8702a, #c75a18); }
+</style>
+</head>
+<body>
+  <div>
+    <div class="hex"></div>
+    <h1 id="nf-title">This cell is empty</h1>
+    <p id="nf-text">The page you are looking for does not exist.</p>
+    <a id="nf-back" href="/">Back to Quillfox</a>
+  </div>
+<script>
+  // Missing page in any language: the /xx/ folder of the address, else the
+  // language picked on the site before, else the browser's.
+  (function () {
+    var APP = 'Quillfox', FOLDERS = true;
+    var T = {
+      es: ['Página no encontrada', 'Esta celda está vacía', 'La página que buscas no existe.', 'Volver a ' + APP],
+      de: ['Seite nicht gefunden', 'Diese Wabe ist leer', 'Die Seite, die du suchst, gibt es nicht.', 'Zurück zu ' + APP],
+      fr: ['Page introuvable', 'Cette alvéole est vide', 'La page que vous cherchez n’existe pas.', 'Retour à ' + APP],
+      ru: ['Страница не найдена', 'Эта ячейка пуста', 'Такой страницы нет.', 'На сайт ' + APP],
+      pt: ['Página não encontrada', 'Este alvéolo está vazio', 'A página que você procura não existe.', 'Voltar para ' + APP]
+    };
+    var lang = null;
+    var m = /^\/(es|de|fr|ru|pt)(\/|$)/.exec(location.pathname);
+    if (m && FOLDERS) lang = m[1];
+    if (!lang) {
+      try { lang = localStorage.getItem('quillfox.lang'); } catch (e) {}
+    }
+    if (!lang) {
+      var prefs = navigator.languages || [navigator.language || 'en'];
+      for (var i = 0; i < prefs.length && !lang; i++) {
+        var code = String(prefs[i]).slice(0, 2).toLowerCase();
+        if (code === 'en' || T[code]) lang = code;
+      }
+    }
+    var t = T[lang];
+    if (!t) return;
+    document.documentElement.lang = lang;
+    document.title = t[0] + ' — ' + APP;
+    document.getElementById('nf-title').textContent = t[1];
+    document.getElementById('nf-text').textContent = t[2];
+    var back = document.getElementById('nf-back');
+    back.textContent = t[3];
+    if (FOLDERS) back.href = '/' + lang + '/';
+  })();
+</script>
+</body>
+</html>

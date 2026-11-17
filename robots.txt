@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://quillfox.nghive.app/sitemap.xml
